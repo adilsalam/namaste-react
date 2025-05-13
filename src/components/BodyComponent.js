@@ -35,11 +35,11 @@ const BodyComponent = () => {
   return resList.length === 0 ? (
     <Shimmer />
   ) : (
-    <div className="body">
-      <div className="filter">
+    <div className="p-4 m-4">
+      <div>
         <input
           type="text"
-          className="search-field"
+          className="border border-solid border-black my-4 py-1 px-2"
           placeholder="Please type here"
           value={searchText}
           onChange={(e) => {
@@ -47,7 +47,7 @@ const BodyComponent = () => {
           }}
         />
         <button
-          className="submit-btn"
+          className="bg-green-200 px-4 py-1 ml-4 my-4"
           type="submit"
           onClick={() => {
             const filteredList = resList.filter((res) =>
@@ -59,7 +59,7 @@ const BodyComponent = () => {
           Search
         </button>
         <button
-          className="filter-btn"
+          className="bg-green-200 px-4 py-1 ml-4 my-4"
           onClick={() => {
             const newList = resList.filter((res) => res.info.avgRating > 4.5);
             setresList(newList);
@@ -69,7 +69,7 @@ const BodyComponent = () => {
         </button>
       </div>
 
-      <div className="res-container">
+      <div className="res-container  flex flex-wrap gap-5 mt-4">
         {filteredRestaurant.map((res) => (
           <Link to={"/restaurant/" + res.info.id} key={res.info.id}>
             <RestaurantCard resData={res} />

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import useRestaurantMenu from "../utils/useRestaurantMenu";
 
 const RestaurantMenu = () => {
-  const resId = useParams();
+  const { resId } = useParams();
   const resInfo = useRestaurantMenu(resId);
 
   if (resInfo === null) return <Shimmer />;
@@ -19,6 +19,8 @@ const RestaurantMenu = () => {
       ?.card || [];
 
   //   const { itemName = "", itemId } = itemCards?.card?.info || {};
+
+  console.log(itemCards);
 
   return (
     <div className="body">

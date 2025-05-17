@@ -1,17 +1,73 @@
-import RestaurantCard from "./RestaurantCard";
+import RestaurantCard, { withPromotedLabel } from "./RestaurantCard";
 import { useEffect, useState } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import _ from "lodash";
 
 const BodyComponent = () => {
+  const count = 8;
   const [resList, setresList] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [filteredRestaurant, setFilteredRestaurant] = useState([]);
 
+  const PromotedRestaurant = withPromotedLabel(RestaurantCard);
+  const dataPost = {
+    lat: "13.08950",
+    lng: "80.27390",
+    nextOffset: "CJhlELQ4KIDI252siZDcGTCnEzgD",
+    widgetOffset: {
+      NewListingView_category_bar_chicletranking_TwoRows: "",
+      NewListingView_category_bar_chicletranking_TwoRows_Rendition: "",
+      Restaurant_Group_WebView_PB_Theme: "",
+      Restaurant_Group_WebView_SEO_PB_Theme: "",
+      collectionV5RestaurantListWidget_SimRestoRelevance_food_seo: "9",
+      inlineFacetFilter: "",
+      restaurantCountWidget: "",
+    },
+    filters: {},
+    seoParams: {
+      seoUrl: "https://www.swiggy.com/restaurants",
+      pageType: "FOOD_HOMEPAGE",
+      apiName: "FoodHomePage",
+      businessLine: "FOOD",
+    },
+    page_type: "DESKTOP_WEB_LISTING",
+    _csrf: "WaN9ZfU8W3BJ-a0uDqQx2lT8poqjOax03MGVNRhM",
+  };
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      const scrollTop = window.scrollY;
+
+      if (windowHeight + scrollTop >= documentHeight - 5) {
+        updateData();
+      }
+    };
+    const throttedScroll = _.throttle(handleScroll, 1000);
+
+    window.addEventListener("scroll", throttedScroll);
+  }, []);
+
+  const updateData = async () => {
+    const response = await fetch(
+      "http://localhost:8080/https://www.swiggy.com/dapi/restaurants/list/update",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataPost),
+      }
+    );
+    const data = response.json();
+    console.log(data);
+  };
 
   const getData = async () => {
     const response = await fetch(
@@ -72,7 +128,11 @@ const BodyComponent = () => {
       <div className="res-container  flex flex-wrap gap-5 mt-4">
         {filteredRestaurant.map((res) => (
           <Link to={"/restaurant/" + res.info.id} key={res.info.id}>
-            <RestaurantCard resData={res} />
+            {resList.aggregatedDiscountInfoV3 ? (
+              <RestaurantCard resData={res} />
+            ) : (
+              <PromotedRestaurant resData={res} />
+            )}
           </Link>
         ))}
       </div>

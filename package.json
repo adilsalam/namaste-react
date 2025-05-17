@@ -4,17 +4,20 @@
   "scripts": {
     "start": "parcel index.html",
     "build": "parcel build index.html",
+    "start-proxy": "node ./node_modules/cors-anywhere/server.js --origin-whitelist=* --port 8080",
     "test": "jest"
   },
   "author": "Adil Muhammed",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "cors-anywhere": "^0.4.4",
     "parcel": "^2.14.4",
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17"
   },
   "dependencies": {
+    "lodash": "^4.17.21",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^6.30.0"

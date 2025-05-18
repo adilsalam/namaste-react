@@ -18,4 +18,17 @@ const RestaurantCard = (props) => {
   );
 };
 
+export const withPromotedLabel = (RestaurantCard) => {
+  return (props) => {
+    return (
+      <div>
+        <label className="bg-green-600 text-white px-3 py-1 rounded-md absolute">
+          Highly Rated
+        </label>
+        <RestaurantCard {...props} />
+      </div>
+    );
+  };
+};
+
 export default RestaurantCard;

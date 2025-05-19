@@ -1,6 +1,7 @@
 import Shimmer from "./Shimmer";
 import { useParams } from "react-router-dom";
 import useRestaurantMenu from "../utils/useRestaurantMenu";
+import ItemCategory from "./ItemCategory";
 
 const RestaurantMenu = () => {
   const { resId } = useParams();
@@ -14,26 +15,20 @@ const RestaurantMenu = () => {
     cuisines = [],
   } = resInfo?.data?.cards[2]?.card?.card?.info || {};
 
-  const { itemCards = [] } =
-    resInfo?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[2]?.card
-      ?.card || [];
-
-  //   const { itemName = "", itemId } = itemCards?.card?.info || {};
-
-  console.log(itemCards);
+  const category =
+    resInfo?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards.filter(
+      (item) => item.card?.card?.["@type"]?.includes("NestedItemCategory")
+    );
 
   return (
-    <div className="body">
-      <h1>{name}</h1>
-      <p>
+    <div className="text-center">
+      <p className="font-bold text-lg">{name}</p>
+      <span>
         {cuisines.join(", ")} - {costForTwoMessage}
-      </p>
-      <h3>Menu</h3>
-      <ul>
-        {itemCards.map((item) => (
-          <li key={item?.card?.info?.id}>{item?.card?.info?.name}</li>
-        ))}
-      </ul>
+      </span>
+      {category.map((item) => (
+        <ItemCategory key={item?.card?.card?.title} data={item?.card?.card} />
+      ))}
     </div>
   );
 };
